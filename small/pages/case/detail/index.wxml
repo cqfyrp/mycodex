@@ -1,0 +1,127 @@
+<view class="page-shell" wx:if="{{caseItem}}">
+  <view class="hero-card">
+    <view class="hero-eyebrow">DESIGNER PREVIEW</view>
+    <view class="hero-title">{{caseItem.title}}</view>
+    <view class="hero-subtitle">当前是设计师详情页，可继续编辑内容或直接分享给客户。客户打开后只会看到当前案例，不会进入首页或案例库。</view>
+    <view class="hero-stats">
+      <view class="stat-card">
+        <view class="stat-value">{{caseItem.houseTypeLabel}}</view>
+        <view class="stat-label">房子户型</view>
+      </view>
+      <view class="stat-card">
+        <view class="stat-value">{{caseItem.materialLabel}}</view>
+        <view class="stat-label">装修材质</view>
+      </view>
+      <view class="stat-card">
+        <view class="stat-value">{{caseItem.areaLabel}}</view>
+        <view class="stat-label">装修面积</view>
+      </view>
+    </view>
+  </view>
+
+  <view class="case-card">
+    <view class="case-cover">
+      <image wx:if="{{caseItem.coverImageUrl}}" class="cover-image" src="{{caseItem.coverImageUrl}}" mode="aspectFill" />
+      <view wx:if="{{caseItem.coverImageUrl}}" class="cover-overlay"></view>
+      <view wx:else class="cover-placeholder {{caseItem.coverTheme}}">
+        <view class="cover-badge">{{caseItem.coverBadge}}</view>
+        <view class="cover-title">{{caseItem.title}}</view>
+        <view class="cover-caption">{{caseItem.address}}</view>
+      </view>
+    </view>
+    <view class="case-body">
+      <view class="case-topline">
+        <view class="case-title">{{caseItem.title}}</view>
+        <view class="inline-tag">{{caseItem.status === 'published' ? '已发布' : '草稿'}}</view>
+      </view>
+      <view class="case-address">{{caseItem.address}}</view>
+      <view class="meta-row">
+        <view class="meta-tag" wx:for="{{caseItem.tags}}" wx:key="*this">{{item}}</view>
+      </view>
+      <view class="divider"></view>
+      <view class="info-grid">
+        <view class="info-item"><view class="info-label">案例地址</view><view class="info-value">{{caseItem.address}}</view></view>
+        <view class="info-item"><view class="info-label">业主尊称</view><view class="info-value">{{caseItem.ownerDisplayName}}</view></view>
+        <view class="info-item"><view class="info-label">房子户型</view><view class="info-value">{{caseItem.houseTypeLabel}}</view></view>
+        <view class="info-item"><view class="info-label">装修面积</view><view class="info-value">{{caseItem.areaLabel}}</view></view>
+        <view class="info-item"><view class="info-label">装修材质</view><view class="info-value">{{caseItem.materialLabel}}</view></view>
+        <view class="info-item"><view class="info-label">装修造价</view><view class="info-value">{{caseItem.amountLabel}}</view></view>
+        <view class="info-item"><view class="info-label">完工时间</view><view class="info-value">{{caseItem.completedAt || '待补充'}}</view></view>
+        <view class="info-item"><view class="info-label">当前状态</view><view class="info-value">{{caseItem.status === 'published' ? '已发布' : '草稿'}}</view></view>
+      </view>
+      <view class="rich-block">
+        <view class="section-title">设计说明</view>
+        <view class="rich-text">{{caseItem.description || '暂无设计说明'}}</view>
+      </view>
+    </view>
+  </view>
+
+  <view class="panel">
+    <view class="section-header">
+      <view>
+        <view class="section-title">空间实景图</view>
+        <view class="section-subtitle">展示客户最容易产生代入感的关键空间画面。</view>
+      </view>
+      <view class="panel-tag">{{caseItem.sceneImages.length}} 张</view>
+    </view>
+    <view class="media-list">
+      <view class="media-card" wx:for="{{caseItem.sceneImages}}" wx:key="id">
+        <image wx:if="{{item.imageUrl}}" class="media-thumb" src="{{item.imageUrl}}" mode="aspectFill" />
+        <view wx:else class="media-placeholder {{item.theme}}">
+          <view class="media-badge">空间实景图</view>
+          <view class="media-title">{{item.title}}</view>
+          <view class="media-caption">{{item.caption}}</view>
+        </view>
+      </view>
+    </view>
+  </view>
+
+  <view class="panel" wx:if="{{visibleModules.length}}">
+    <view class="section-header">
+      <view>
+        <view class="section-title">自定义内容模块</view>
+        <view class="section-subtitle">这里适合放工艺亮点、图文补充、视频或客户特别关心的信息。</view>
+      </view>
+      <view class="panel-tag">{{visibleModules.length}} 个模块</view>
+    </view>
+    <view class="module-list">
+      <view class="module-card" wx:for="{{visibleModules}}" wx:key="id" wx:for-item="module">
+        <view class="module-title">{{module.moduleTitle}}</view>
+        <view wx:if="{{module.moduleType === 'text' || module.moduleType === 'textarea' || module.moduleType === 'number' || module.moduleType === 'rich_content'}}" class="module-content">{{module.displayText || '暂无内容'}}</view>
+        <view wx:if="{{module.moduleType === 'single_select' || module.moduleType === 'multi_select'}}" class="module-content">{{module.displayText || '暂无内容'}}</view>
+        <view wx:if="{{module.moduleType === 'image' || module.moduleType === 'image_group'}}" class="mini-list">
+          <view class="mini-card" wx:for="{{module.mediaItems}}" wx:key="index" wx:for-item="media">
+            <view class="mini-thumb">
+              <image wx:if="{{media.imageUrl}}" class="mini-image" src="{{media.imageUrl}}" mode="aspectFill" />
+              <view wx:else class="mini-placeholder {{media.theme || 'theme-amber'}}">
+                <view class="cover-badge">图片模块</view>
+                <view class="cover-caption">{{media.title || '案例图片'}}</view>
+              </view>
+            </view>
+            <view class="mini-caption">{{media.title || '案例图片'}}</view>
+          </view>
+        </view>
+        <view wx:if="{{module.moduleType === 'video'}}">
+          <video wx:if="{{module.videoUrl}}" class="video-player" src="{{module.videoUrl}}" poster="{{module.posterUrl}}" controls></video>
+          <view wx:else class="media-card">
+            <view class="media-placeholder {{module.posterTheme}}">
+              <view class="media-badge">视频模块</view>
+              <view class="media-title">{{module.moduleTitle}}</view>
+              <view class="media-caption">当前为演示占位，接入后端后可播放正式视频。</view>
+            </view>
+          </view>
+        </view>
+      </view>
+    </view>
+  </view>
+
+  <view class="fixed-footer">
+    <view class="button-row">
+      <button class="btn-secondary" bindtap="goEdit">编辑案例</button>
+      <button class="btn" open-type="share">分享给客户</button>
+    </view>
+    <view class="button-row">
+      <button class="btn-ghost" bindtap="copySharePath">复制分享路径</button>
+    </view>
+  </view>
+</view>

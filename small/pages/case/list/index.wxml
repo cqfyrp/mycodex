@@ -1,0 +1,87 @@
+<view class="page-shell">
+  <view class="panel">
+    <view class="section-header">
+      <view>
+        <view class="section-title">案例检索</view>
+        <view class="section-subtitle">按标题、地址、标签、户型和材质快速定位案例。</view>
+      </view>
+      <view class="panel-tag">设计师工作台</view>
+    </view>
+    <view class="search-box">
+      <view class="search-icon">搜索</view>
+      <input class="search-input" placeholder="搜索案例标题、地址、标签" value="{{keyword}}" bindinput="handleKeywordChange" />
+    </view>
+
+    <view class="section-subtitle">户型筛选</view>
+    <view class="chip-row">
+      <view
+        class="chip {{selectedHouseType === item.value ? 'active' : ''}}"
+        wx:for="{{houseTypeOptions}}"
+        wx:key="value"
+        bindtap="chooseHouseType"
+        data-value="{{item.value}}"
+      >
+        {{item.label}}
+      </view>
+    </view>
+
+    <view class="section-subtitle">材质筛选</view>
+    <view class="chip-row">
+      <view
+        class="chip {{selectedMaterialType === item.value ? 'active' : ''}}"
+        wx:for="{{materialOptions}}"
+        wx:key="value"
+        bindtap="chooseMaterial"
+        data-value="{{item.value}}"
+      >
+        {{item.label}}
+      </view>
+    </view>
+  </view>
+
+  <view class="panel">
+    <view class="section-header">
+      <view>
+        <view class="section-title">筛选结果</view>
+        <view class="section-subtitle">共 {{displayCases.length}} 个案例</view>
+      </view>
+      <view class="inline-tag">{{displayCases.length}} 条结果</view>
+    </view>
+
+    <view wx:if="{{displayCases.length}}">
+      <view class="case-card" wx:for="{{displayCases}}" wx:key="id">
+        <view class="case-cover" bindtap="goDetail" data-id="{{item.id}}">
+          <image wx:if="{{item.coverImageUrl}}" class="cover-image" src="{{item.coverImageUrl}}" mode="aspectFill" />
+          <view wx:if="{{item.coverImageUrl}}" class="cover-overlay"></view>
+          <view wx:else class="cover-placeholder {{item.coverTheme}}">
+            <view class="cover-badge">{{item.coverBadge}}</view>
+            <view class="cover-title">{{item.title}}</view>
+            <view class="cover-caption">{{item.address}}</view>
+          </view>
+        </view>
+        <view class="case-body">
+          <view class="case-topline">
+            <view class="case-title">{{item.title}}</view>
+            <view class="inline-tag">{{item.status === 'published' ? '已发布' : '草稿'}}</view>
+          </view>
+          <view class="case-address">{{item.address}}</view>
+          <view class="meta-row">
+            <view class="meta-tag">{{item.houseTypeLabel}}</view>
+            <view class="meta-tag">{{item.materialLabel}}</view>
+            <view class="meta-tag">{{item.completedAt}}</view>
+          </view>
+          <view class="inline-actions">
+            <button class="small-btn" bindtap="goDetail" data-id="{{item.id}}">查看详情</button>
+            <button class="small-btn" bindtap="goEdit" data-id="{{item.id}}">编辑案例</button>
+          </view>
+        </view>
+      </view>
+    </view>
+
+    <view wx:else class="empty-state">暂时没有符合条件的案例，可以试试调整筛选条件。</view>
+  </view>
+
+  <view class="fixed-footer">
+    <button class="btn" bindtap="createCase">新增案例</button>
+  </view>
+</view>

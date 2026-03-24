@@ -1,0 +1,4 @@
+.chip {
+  min-width: 132rpx;
+  text-align: center;
+}

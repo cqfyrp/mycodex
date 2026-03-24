@@ -1,0 +1,113 @@
+<view class="page-shell" wx:if="{{caseItem}}">
+  <view class="hero-card">
+    <view class="hero-eyebrow">LAIAN SHARED CASE</view>
+    <view class="hero-title">{{caseItem.title}}</view>
+    <view class="hero-subtitle">这是设计师分享给你的莱安装修案例详情页。当前页面仅展示这个案例，不提供其他案例入口。</view>
+    <view class="hero-stats">
+      <view class="stat-card">
+        <view class="stat-value">{{caseItem.houseTypeLabel}}</view>
+        <view class="stat-label">房子户型</view>
+      </view>
+      <view class="stat-card">
+        <view class="stat-value">{{caseItem.materialLabel}}</view>
+        <view class="stat-label">装修材质</view>
+      </view>
+      <view class="stat-card">
+        <view class="stat-value">{{caseItem.areaLabel}}</view>
+        <view class="stat-label">装修面积</view>
+      </view>
+    </view>
+    <view class="notice-strip">当前是单案例分享模式，系统不会展示其他案例、首页或推荐内容。</view>
+  </view>
+
+  <view class="case-card">
+    <view class="case-cover">
+      <image wx:if="{{caseItem.coverImageUrl}}" class="cover-image" src="{{caseItem.coverImageUrl}}" mode="aspectFill" />
+      <view wx:if="{{caseItem.coverImageUrl}}" class="cover-overlay"></view>
+      <view wx:else class="cover-placeholder {{caseItem.coverTheme}}">
+        <view class="cover-badge">{{caseItem.coverBadge}}</view>
+        <view class="cover-title">{{caseItem.title}}</view>
+        <view class="cover-caption">{{caseItem.address}}</view>
+      </view>
+    </view>
+
+    <view class="case-body">
+      <view class="meta-row">
+        <view class="meta-tag" wx:for="{{caseItem.tags}}" wx:key="*this">{{item}}</view>
+      </view>
+      <view class="divider"></view>
+      <view class="info-grid">
+        <view class="info-item"><view class="info-label">案例地址</view><view class="info-value">{{caseItem.address}}</view></view>
+        <view class="info-item"><view class="info-label">业主尊称</view><view class="info-value">{{caseItem.ownerDisplayName}}</view></view>
+        <view class="info-item"><view class="info-label">房子户型</view><view class="info-value">{{caseItem.houseTypeLabel}}</view></view>
+        <view class="info-item"><view class="info-label">装修面积</view><view class="info-value">{{caseItem.areaLabel}}</view></view>
+        <view class="info-item"><view class="info-label">装修材质</view><view class="info-value">{{caseItem.materialLabel}}</view></view>
+        <view class="info-item"><view class="info-label">装修造价</view><view class="info-value">{{caseItem.amountLabel}}</view></view>
+        <view class="info-item"><view class="info-label">完工时间</view><view class="info-value">{{caseItem.completedAt || '待补充'}}</view></view>
+      </view>
+      <view class="rich-block">
+        <view class="section-title">设计说明</view>
+        <view class="rich-text">{{caseItem.description || '暂无设计说明'}}</view>
+      </view>
+    </view>
+  </view>
+
+  <view class="panel">
+    <view class="section-header">
+      <view>
+        <view class="section-title">空间实景图</view>
+        <view class="section-subtitle">按完整案例逻辑展示关键空间画面。</view>
+      </view>
+      <view class="panel-tag">{{caseItem.sceneImages.length}} 张</view>
+    </view>
+    <view class="media-list">
+      <view class="media-card" wx:for="{{caseItem.sceneImages}}" wx:key="id">
+        <image wx:if="{{item.imageUrl}}" class="media-thumb" src="{{item.imageUrl}}" mode="aspectFill" />
+        <view wx:else class="media-placeholder {{item.theme}}">
+          <view class="media-badge">空间实景图</view>
+          <view class="media-title">{{item.title}}</view>
+          <view class="media-caption">{{item.caption}}</view>
+        </view>
+      </view>
+    </view>
+  </view>
+
+  <view class="panel" wx:if="{{visibleModules.length}}">
+    <view class="section-header">
+      <view>
+        <view class="section-title">更多项目内容</view>
+        <view class="section-subtitle">补充材质、工艺、视频和其他延展展示内容。</view>
+      </view>
+      <view class="panel-tag">{{visibleModules.length}} 个模块</view>
+    </view>
+    <view class="module-list">
+      <view class="module-card" wx:for="{{visibleModules}}" wx:key="id" wx:for-item="module">
+        <view class="module-title">{{module.moduleTitle}}</view>
+        <view wx:if="{{module.moduleType === 'text' || module.moduleType === 'textarea' || module.moduleType === 'number' || module.moduleType === 'rich_content'}}" class="module-content">{{module.displayText || '暂无内容'}}</view>
+        <view wx:if="{{module.moduleType === 'single_select' || module.moduleType === 'multi_select'}}" class="module-content">{{module.displayText || '暂无内容'}}</view>
+        <view wx:if="{{module.moduleType === 'image' || module.moduleType === 'image_group'}}" class="mini-list">
+          <view class="mini-card" wx:for="{{module.mediaItems}}" wx:key="index" wx:for-item="media">
+            <view class="mini-thumb">
+              <image wx:if="{{media.imageUrl}}" class="mini-image" src="{{media.imageUrl}}" mode="aspectFill" />
+              <view wx:else class="mini-placeholder {{media.theme || 'theme-amber'}}">
+                <view class="cover-badge">图片模块</view>
+                <view class="cover-caption">{{media.title || '案例图片'}}</view>
+              </view>
+            </view>
+            <view class="mini-caption">{{media.title || '案例图片'}}</view>
+          </view>
+        </view>
+        <view wx:if="{{module.moduleType === 'video'}}">
+          <video wx:if="{{module.videoUrl}}" class="video-player" src="{{module.videoUrl}}" poster="{{module.posterUrl}}" controls></video>
+          <view wx:else class="media-card">
+            <view class="media-placeholder {{module.posterTheme}}">
+              <view class="media-badge">视频模块</view>
+              <view class="media-title">{{module.moduleTitle}}</view>
+              <view class="media-caption">当前为演示占位，正式接入后可直接播放视频。</view>
+            </view>
+          </view>
+        </view>
+      </view>
+    </view>
+  </view>
+</view>

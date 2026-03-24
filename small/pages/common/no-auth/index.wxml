@@ -1,0 +1,10 @@
+<view class="page-shell">
+  <view class="tips-card">
+    <view class="hero-eyebrow soft">ACCESS LIMITED</view>
+    <view class="tips-title">无访问权限</view>
+    <view class="tips-copy">当前页面仅支持通过设计师分享的案例链接访问，或由公司设计师登录后查看。</view>
+    <view class="button-row">
+      <button class="btn" bindtap="goBack">返回上一页</button>
+    </view>
+  </view>
+</view>

@@ -1,0 +1,20 @@
+{
+  "pages": [
+    "pages/login/index",
+    "pages/home/index",
+    "pages/case/list/index",
+    "pages/case/detail/index",
+    "pages/case/edit/index",
+    "pages/share/detail/index",
+    "pages/common/no-auth/index"
+  ],
+  "window": {
+    "navigationBarTitleText": "莱安案例库",
+    "navigationBarBackgroundColor": "#f7f1e8",
+    "navigationBarTextStyle": "black",
+    "backgroundColor": "#efe4d4",
+    "backgroundTextStyle": "dark"
+  },
+  "style": "v2",
+  "sitemapLocation": "sitemap.json"
+}

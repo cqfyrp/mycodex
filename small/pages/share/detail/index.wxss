@@ -1,0 +1,4 @@
+.video-player {
+  margin-top: 16rpx;
+  border-radius: 20rpx;
+}

@@ -1,0 +1,171 @@
+<view class="page-shell">
+  <view class="hero-card">
+    <view class="hero-eyebrow">CASE STUDIO</view>
+    <view class="hero-title">{{isEdit ? '编辑案例' : '新增案例'}}</view>
+    <view class="hero-subtitle">固定字段用于统一管理，自定义模块用于后续自由扩展图片、视频、说明内容。</view>
+    <view class="hero-stats">
+      <view class="stat-card">
+        <view class="stat-value">{{form.sceneImages.length}}</view>
+        <view class="stat-label">实景图片</view>
+      </view>
+      <view class="stat-card">
+        <view class="stat-value">{{form.modules.length}}</view>
+        <view class="stat-label">自定义模块</view>
+      </view>
+      <view class="stat-card">
+        <view class="stat-value">{{isEdit ? '编辑中' : '新建中'}}</view>
+        <view class="stat-label">当前状态</view>
+      </view>
+    </view>
+  </view>
+
+  <view class="panel">
+    <view class="section-header">
+      <view>
+        <view class="section-title">基础信息</view>
+        <view class="section-subtitle">先把统一字段补齐，后面分享和筛选都会依赖这里。</view>
+      </view>
+      <view class="panel-tag">步骤 1</view>
+    </view>
+    <view class="field"><text class="field-label">案例标题</text><input class="field-input" placeholder="请输入案例标题" value="{{form.title}}" data-field="title" bindinput="updateField" /><view class="field-hint">标题建议包含区域、户型或核心材质，方便后续搜索。</view></view>
+    <view class="field"><text class="field-label">案例地址</text><input class="field-input" placeholder="建议脱敏到小区或区域级别" value="{{form.address}}" data-field="address" bindinput="updateField" /></view>
+    <view class="field"><text class="field-label">业主尊称</text><input class="field-input" placeholder="例如：王先生" value="{{form.ownerDisplayName}}" data-field="ownerDisplayName" bindinput="updateField" /></view>
+
+    <view class="field">
+      <text class="field-label">房子户型</text>
+      <picker range="{{houseTypeOptions}}" range-key="label" bindchange="chooseHouseType">
+        <view class="picker-field {{!form.houseTypeLabel ? 'placeholder' : ''}}">{{form.houseTypeLabel || '请选择户型'}}</view>
+      </picker>
+    </view>
+
+    <view class="field"><text class="field-label">装修面积</text><input class="field-input" type="number" placeholder="请输入面积，单位㎡" value="{{form.areaSqm}}" data-field="areaSqm" bindinput="updateField" /></view>
+
+    <view class="field">
+      <text class="field-label">装修材质</text>
+      <picker range="{{materialOptions}}" range-key="label" bindchange="chooseMaterial">
+        <view class="picker-field {{!form.materialLabel ? 'placeholder' : ''}}">{{form.materialLabel || '请选择材质'}}</view>
+      </picker>
+    </view>
+
+    <view class="field"><text class="field-label">装修造价</text><input class="field-input" type="digit" placeholder="请输入装修造价" value="{{form.costAmount}}" data-field="costAmount" bindinput="updateField" /></view>
+    <view class="field"><text class="field-label">完工时间</text><input class="field-input" placeholder="例如：2026-03-01" value="{{form.completedAt}}" data-field="completedAt" bindinput="updateField" /></view>
+    <view class="field"><text class="field-label">案例标签</text><input class="field-input" placeholder="多个标签用空格分隔" value="{{form.tagsText}}" data-field="tagsText" bindinput="updateField" /><view class="field-hint">例如：别墅 新中式 整木定制</view></view>
+    <view class="field"><text class="field-label">排序值</text><input class="field-input" type="number" placeholder="数值越大越靠前" value="{{form.sortOrder}}" data-field="sortOrder" bindinput="updateField" /></view>
+    <view class="field"><text class="field-label">设计说明</text><textarea class="field-textarea" placeholder="请输入设计说明" value="{{form.description}}" data-field="description" bindinput="updateField"></textarea></view>
+  </view>
+
+  <view class="panel">
+    <view class="section-header">
+      <view>
+        <view class="section-title">封面图与空间实景图</view>
+        <view class="section-subtitle">封面图决定第一眼印象，实景图决定客户是否有代入感。</view>
+      </view>
+      <view class="panel-tag">步骤 2</view>
+    </view>
+    <view class="button-row">
+      <button class="btn-secondary" bindtap="chooseCoverImage">上传封面图</button>
+      <button class="btn-ghost" bindtap="chooseSceneImages">上传实景图</button>
+    </view>
+
+    <view class="media-card" wx:if="{{form.coverImageUrl}}">
+      <image class="media-thumb" src="{{form.coverImageUrl}}" mode="aspectFill" />
+    </view>
+    <view class="media-card" wx:else>
+      <view class="media-placeholder {{form.coverTheme}}">
+        <view class="media-badge">封面图占位</view>
+        <view class="media-title">{{form.title || '案例封面'}}</view>
+        <view class="media-caption">当前未上传封面图时，会使用此风格化占位。</view>
+      </view>
+    </view>
+
+    <view class="mini-list">
+      <view class="mini-card" wx:for="{{form.sceneImages}}" wx:key="id">
+        <view class="mini-thumb">
+          <image wx:if="{{item.imageUrl}}" class="mini-image" src="{{item.imageUrl}}" mode="aspectFill" />
+          <view wx:else class="mini-placeholder {{item.theme}}">
+            <view class="cover-caption">{{item.title}}</view>
+          </view>
+        </view>
+        <view class="mini-caption">{{item.title}}</view>
+        <view class="inline-actions">
+          <button class="small-btn warn" bindtap="removeSceneImage" data-index="{{index}}">删除</button>
+        </view>
+      </view>
+    </view>
+  </view>
+
+  <view class="panel">
+    <view class="section-header">
+      <view>
+        <view class="section-title">自定义内容模块</view>
+        <view class="section-subtitle">支持后续自由扩展文字、图片、视频等内容。</view>
+      </view>
+      <view class="panel-tag">步骤 3</view>
+    </view>
+
+    <view class="button-row">
+      <button class="btn" bindtap="addModule">新增模块</button>
+    </view>
+
+    <view class="module-card" wx:for="{{form.modules}}" wx:key="id" wx:for-item="module">
+      <view class="field"><text class="field-label">模块标题</text><input class="field-input" placeholder="请输入模块标题" value="{{module.moduleTitle}}" data-index="{{index}}" data-field="moduleTitle" bindinput="updateModuleField" /></view>
+      <view class="field"><text class="field-label">模块类型</text><view class="picker-field">{{module.moduleTypeLabel}}</view></view>
+
+      <view wx:if="{{module.moduleType === 'text' || module.moduleType === 'number'}}" class="field">
+        <text class="field-label">模块内容</text>
+        <input class="field-input" placeholder="请输入模块内容" value="{{module.contentText}}" data-index="{{index}}" data-field="contentText" bindinput="updateModuleField" />
+      </view>
+
+      <view wx:if="{{module.moduleType === 'textarea' || module.moduleType === 'rich_content'}}" class="field">
+        <text class="field-label">模块内容</text>
+        <textarea class="field-textarea" placeholder="请输入模块内容" value="{{module.contentText}}" data-index="{{index}}" data-field="contentText" bindinput="updateModuleField"></textarea>
+      </view>
+
+      <view wx:if="{{module.moduleType === 'single_select' || module.moduleType === 'multi_select'}}" class="field">
+        <text class="field-label">展示内容</text>
+        <textarea class="field-textarea" placeholder="例如：用材、工艺、空间气场" value="{{module.contentJson.valueText}}" data-index="{{index}}" data-field="valueText" bindinput="updateModuleJsonField"></textarea>
+      </view>
+
+      <view wx:if="{{module.moduleType === 'image' || module.moduleType === 'image_group'}}" class="field">
+        <text class="field-label">图片模块</text>
+        <button class="btn-secondary" bindtap="chooseModuleImages" data-index="{{index}}">选择图片</button>
+        <view class="mini-list" wx:if="{{module.contentJson.mediaItems.length}}">
+          <view class="mini-card" wx:for="{{module.contentJson.mediaItems}}" wx:key="index" wx:for-item="media">
+            <view class="mini-thumb">
+              <image wx:if="{{media.imageUrl}}" class="mini-image" src="{{media.imageUrl}}" mode="aspectFill" />
+              <view wx:else class="mini-placeholder {{media.theme || 'theme-amber'}}"></view>
+            </view>
+            <view class="mini-caption">{{media.title || '模块图片'}}</view>
+          </view>
+        </view>
+      </view>
+
+      <view wx:if="{{module.moduleType === 'video'}}" class="field">
+        <text class="field-label">视频模块</text>
+        <button class="btn-secondary" bindtap="chooseModuleVideo" data-index="{{index}}">选择视频</button>
+        <view class="section-subtitle">{{module.contentJson.videoUrl ? '已选择本地视频' : '暂未选择视频'}}</view>
+      </view>
+
+      <view class="switch-row"><text>是否显示</text><switch checked="{{module.isVisible}}" data-index="{{index}}" bindchange="toggleModuleVisible" color="#8b5a32"></switch></view>
+      <view class="switch-row"><text>是否必填</text><switch checked="{{module.isRequired}}" data-index="{{index}}" bindchange="toggleModuleRequired" color="#8b5a32"></switch></view>
+
+      <view class="inline-actions">
+        <button class="small-btn" bindtap="moveModule" data-index="{{index}}" data-direction="up">上移</button>
+        <button class="small-btn" bindtap="moveModule" data-index="{{index}}" data-direction="down">下移</button>
+        <button class="small-btn warn" bindtap="removeModule" data-index="{{index}}">删除</button>
+      </view>
+    </view>
+
+    <view wx:if="{{!form.modules.length}}" class="empty-state">还没有自定义内容模块，点击上方按钮可随时新增。</view>
+  </view>
+
+  <view class="fixed-footer">
+    <view class="button-row">
+      <button class="btn-secondary" bindtap="saveDraft">保存草稿</button>
+      <button class="btn" bindtap="publishCase">发布案例</button>
+    </view>
+    <view class="button-row" wx:if="{{isEdit}}">
+      <button class="btn-danger" bindtap="deleteCurrentCase">删除案例</button>
+    </view>
+  </view>
+</view>

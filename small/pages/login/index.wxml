@@ -1,0 +1,50 @@
+<view class="page-shell">
+  <view class="hero-card">
+    <view class="hero-eyebrow">WECHAT MINI PROGRAM</view>
+    <view class="hero-title">莱安家装案例分享微信小程序</view>
+    <view class="hero-subtitle">设计师登录后可统一管理案例、快速分享给客户。客户打开分享卡片后，只能查看当前案例详情。</view>
+    <view class="hero-stats">
+      <view class="stat-card">
+        <view class="stat-value">案例库</view>
+        <view class="stat-label">统一维护公司案例</view>
+      </view>
+      <view class="stat-card">
+        <view class="stat-value">定向分享</view>
+        <view class="stat-label">设计师可直接发给客户</view>
+      </view>
+      <view class="stat-card">
+        <view class="stat-value">受限访问</view>
+        <view class="stat-label">客户仅看单个案例</view>
+      </view>
+    </view>
+  </view>
+
+  <view class="panel">
+    <view class="section-header">
+      <view>
+        <view class="section-title">登录账号</view>
+        <view class="section-subtitle">当前为演示版，本地内置两个测试账号。</view>
+      </view>
+      <view class="panel-tag">内部使用</view>
+    </view>
+
+    <view class="field">
+      <text class="field-label">账号</text>
+      <input class="field-input" placeholder="请输入账号" value="{{account}}" data-field="account" bindinput="handleInput" />
+    </view>
+
+    <view class="field">
+      <text class="field-label">密码</text>
+      <input class="field-input" password placeholder="请输入密码" value="{{password}}" data-field="password" bindinput="handleInput" />
+    </view>
+
+    <view class="button-row">
+      <button class="btn" bindtap="submitLogin">进入案例库</button>
+    </view>
+  </view>
+
+  <view class="panel">
+    <view class="section-title">演示账号</view>
+    <view class="section-subtitle">账号 `laian01` / `laian02`，密码统一为 `123456`。</view>
+  </view>
+</view>
